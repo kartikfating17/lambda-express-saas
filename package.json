@@ -1,0 +1,10 @@
+{
+  "name": "lambda-express-mongo",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "aws-serverless-express": "^3.4.0",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.0"
+  }
+}

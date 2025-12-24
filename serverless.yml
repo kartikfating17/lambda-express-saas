@@ -1,0 +1,18 @@
+service: lambda-express-mongo
+
+frameworkVersion: "3"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+  environment:
+    MONGO_URI: mongodb+srv://user:pass@cluster.mongodb.net/appdb
+
+functions:
+  api:
+    handler: src/server.handler
+    events:
+      - httpApi:
+          path: /{proxy+}
+          method: ANY
