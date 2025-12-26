@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // AWS credentials if needed
-        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
-        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')   // Jenkins stored credentials
+        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        NODE_ENV              = 'production'
     }
 
     stages {
