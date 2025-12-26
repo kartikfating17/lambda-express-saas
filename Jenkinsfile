@@ -1,11 +1,16 @@
 pipeline {
     agent any
 
-    stages {
+    environment {
+        // AWS credentials if needed
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+    }
 
+    stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/kartikfating17/lambda-express-saas.git'
+                git url: 'https://github.com/kartikfating17/lambda-express-saas.git', branch: 'main'
             }
         }
 
@@ -16,26 +21,20 @@ pipeline {
         }
 
         stage('Serverless Deploy') {
-            environment {
-                NODE_ENV = 'production'
-            }
             steps {
-                withCredentials([
-                    [$class: 'AmazonWebServicesCredentialsBinding',
-                     credentialsId: 'aws-prod']
-                ]) {
-                    bat 'npx serverless deploy --stage prod'
+                withCredentials([string(credentialsId: 'SERVERLESS_KEY', variable: 'SERVERLESS_ACCESS_KEY')]) {
+                    // Pass the Serverless key as environment variable
+                    withEnv(["SERVERLESS_ACCESS_KEY=${env.SERVERLESS_ACCESS_KEY}"]) {
+                        bat 'npx serverless deploy --stage prod'
+                    }
                 }
             }
         }
     }
 
     post {
-        success {
-            echo '✅ Deployment successful!'
-        }
         failure {
-            echo '❌ Deployment failed! Check logs.'
+            echo 'Deployment failed! Check logs.'
         }
     }
 }
