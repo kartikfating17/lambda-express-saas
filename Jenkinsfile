@@ -1,16 +1,12 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')   // Jenkins stored credentials
-        AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
-        NODE_ENV              = 'production'
-    }
-
     stages {
+
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/kartikfating17/lambda-express-saas.git', branch: 'main'
+                git branch: 'main',
+                    url: 'https://github.com/kartikfating17/lambda-express-saas.git'
             }
         }
 
@@ -22,19 +18,31 @@ pipeline {
 
         stage('Serverless Deploy') {
             steps {
-                withCredentials([string(credentialsId: 'SERVERLESS_KEY', variable: 'SERVERLESS_ACCESS_KEY')]) {
-                    // Pass the Serverless key as environment variable
-                    withEnv(["SERVERLESS_ACCESS_KEY=${env.SERVERLESS_ACCESS_KEY}"]) {
-                        bat 'npx serverless deploy --stage prod'
-                    }
+                withCredentials([
+                    string(credentialsId: 'AWS_ACCESS_KEY_ID', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'AWS_SECRET_ACCESS_KEY', variable: 'AWS_SECRET_ACCESS_KEY'),
+                    string(credentialsId: 'SERVERLESS_KEY', variable: 'SERVERLESS_ACCESS_KEY')
+                ]) {
+
+                    bat '''
+                        echo ===== AWS & Serverless Deployment =====
+                        set AWS_ACCESS_KEY_ID=%AWS_ACCESS_KEY_ID%
+                        set AWS_SECRET_ACCESS_KEY=%AWS_SECRET_ACCESS_KEY%
+                        set SERVERLESS_ACCESS_KEY=%SERVERLESS_ACCESS_KEY%
+
+                        npx serverless deploy --stage prod
+                    '''
                 }
             }
         }
     }
 
     post {
+        success {
+            echo '✅ Deployment successful!'
+        }
         failure {
-            echo 'Deployment failed! Check logs.'
+            echo '❌ Deployment failed! Check logs above.'
         }
     }
 }
