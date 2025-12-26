@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "aws-serverless-express": "^3.4.0",
+    "@vendia/serverless-express": "^4.12.6",
     "express": "^4.19.2",
     "mongoose": "^8.5.0"
   }

@@ -9,6 +9,10 @@ export const getItem = async (req, res) => {
   const item = await Item.findById(req.params.id);
   res.json(item);
 };
+export const getAllItem = async (req, res) => {
+  const items = await Item.find();
+  res.json(items);
+};
 
 export const updateItem = async (req, res) => {
   const item = await Item.findByIdAndUpdate(

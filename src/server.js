@@ -1,19 +1,15 @@
-import awsServerlessExpress from "aws-serverless-express";
+import serverlessExpress from "@vendia/serverless-express";
 import app from "./app.js";
 import connectDB from "./config/mongo.js";
 
-const server = awsServerlessExpress.createServer(app);
-
-// DB connection reused across invocations
-let isConnected = false;
+// Create server ONCE per container
+const server = serverlessExpress({ app });
 
 export const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  if (!isConnected) {
-    await connectDB();
-    isConnected = true;
-  }
+  // Mongo connection is already cached safely
+  await connectDB();
 
-  return awsServerlessExpress.proxy(server, event, context);
+  return server(event, context);
 };

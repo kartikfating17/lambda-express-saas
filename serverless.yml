@@ -7,12 +7,11 @@ provider:
   runtime: nodejs18.x
   region: ap-south-1
   environment:
-    MONGO_URI: mongodb+srv://user:pass@cluster.mongodb.net/appdb
+    MONGO_URI: mongodb://appuser:strongpassword@13.203.200.140:27017/appdb?authSource=appdb
 
 functions:
   api:
     handler: src/server.handler
     events:
-      - httpApi:
-          path: /{proxy+}
-          method: ANY
+      - httpApi: "*"
+
