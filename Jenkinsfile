@@ -11,7 +11,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm ci'
+                bat 'npm ci'
             }
         }
 
@@ -24,7 +24,7 @@ pipeline {
                     [$class: 'AmazonWebServicesCredentialsBinding',
                      credentialsId: 'aws-prod']
                 ]) {
-                    sh 'npx serverless deploy --stage prod'
+                    bat 'npx serverless deploy --stage prod'
                 }
             }
         }
