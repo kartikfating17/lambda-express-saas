@@ -8,7 +8,7 @@ const server = serverlessExpress({ app });
 export const handler = async (event, context) => {
   context.callbackWaitsForEmptyEventLoop = false;
 
-  // Mongo connection is already cached safely
+  // Mongo connection cached
   await connectDB();
 
   return server(event, context);
