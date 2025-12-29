@@ -7,9 +7,8 @@ provider:
   region: ap-south-1
   environment:
     MONGO_URI: mongodb://appuser:strongpassword@13.203.200.140:27017/appdb?authSource=appdb
-    RAZORPAY_KEY_ID: ${env:RAZORPAY_KEY_ID}
-    RAZORPAY_KEY_SECRET: ${env:RAZORPAY_KEY_SECRET}
-
+    RAZORPAY_KEY_ID: rzp_test_1AaBbCcDdEeFf
+    RAZORPAY_KEY_SECRET: AbCdEfGhIjKlMnOpQrStUvWxYz123456
 functions:
   api:
     handler: src/server.handler
